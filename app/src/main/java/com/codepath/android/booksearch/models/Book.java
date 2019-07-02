@@ -1,17 +1,34 @@
 package com.codepath.android.booksearch.models;
 
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
+@Parcel  // annotation indicate class is Parcelable
 public class Book {
     private String openLibraryId;
     private String author;
     private String title;
+    private String publisher;
+    private String publishYear;
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public String getPublishYear() {
+        return publishYear;
+    }
+
+
+    // no-arg, empty constructor required for parceler
+    public Book() {}
 
     public String getOpenLibraryId() {
         return openLibraryId;
@@ -24,6 +41,7 @@ public class Book {
     public String getAuthor() {
         return author;
     }
+
 
     // Get book cover from covers API
     public String getCoverUrl() {
@@ -43,6 +61,9 @@ public class Book {
                 book.openLibraryId = ids.getString(0);
             }
             book.title = jsonObject.has("title_suggest") ? jsonObject.getString("title_suggest") : "";
+            // TODO: fix format to show earliest publish year/publisher
+            book.publisher = jsonObject.has("publisher") ? jsonObject.getString("publisher") : "";
+            book.publishYear = jsonObject.has("publish_year") ? jsonObject.getString("publish_year"):"";
             book.author = getAuthor(jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
